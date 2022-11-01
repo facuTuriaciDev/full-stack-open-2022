@@ -6,49 +6,50 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const all = good + neutral + bad;
-
   const Button = ({ onClick, text }) => (
     <button onClick={onClick}>
       {text}
     </button>
   )
 
-  const Statistics = ({text, value}) => (
+  const Statistics = ({good, neutral, bad}) => {
+    const all = good + neutral + bad;
+
+    if (all === 0) {
+      return (
+        <div>
+          <p>No feedback given</p>
+        </div>
+      )
+    }
+    return(
+      <div>
+        <StatisticsLine text='good' value={good}/>
+        <StatisticsLine text='neutral' value={neutral}/>
+        <StatisticsLine text='bad' value={bad}/>
+        <StatisticsLine text='all' value={all}/>
+        <StatisticsLine text='average' value={(good - bad) / all}/>
+        <StatisticsLine text='positive' value={(good / all) * 100}/>
+      </div>
+    )
+    
+  }
+
+  const StatisticsLine = ({text, value}) => (
     <div>{text} {value}</div>
   )
 
-  if (all === 0) {
     return (
       <div>
         <h1>give feedback</h1>
         <Button onClick={() => setGood(good + 1)} text='good' />
         <Button onClick={() => setNeutral(neutral + 1)} text='neutral' />
         <Button onClick={() => setBad(bad + 1)} text='bad'/>
-        
         <h1>statistics</h1>
+        <Statistics good={good} neutral={neutral} bad={bad}/>
 
-        <p>No feedback given</p>
       </div>
     )
-  }
-  return (
-    <div>
-      <h1>give feedback</h1>
-      <Button onClick={() => setGood(good + 1)} text='good' />
-      <Button onClick={() => setNeutral(neutral + 1)} text='neutral' />
-      <Button onClick={() => setBad(bad + 1)} text='bad'/>
-      
-      <h1>statistics</h1>
-
-      <Statistics text='good' value={good}/>
-      <Statistics text='neutral' value={neutral}/>
-      <Statistics text='bad' value={bad}/>
-      <Statistics text='all' value={all}/>
-      <Statistics text='average' value={(good - bad) / all}/>
-      <Statistics text='positive' value={(good / all) * 100}/>
-    </div>
-  )
 }
 
 export default App
