@@ -18,6 +18,20 @@ const App = () => {
     <div>{text} {value}</div>
   )
 
+  if (all === 0) {
+    return (
+      <div>
+        <h1>give feedback</h1>
+        <Button onClick={() => setGood(good + 1)} text='good' />
+        <Button onClick={() => setNeutral(neutral + 1)} text='neutral' />
+        <Button onClick={() => setBad(bad + 1)} text='bad'/>
+        
+        <h1>statistics</h1>
+
+        <p>No feedback given</p>
+      </div>
+    )
+  }
   return (
     <div>
       <h1>give feedback</h1>
