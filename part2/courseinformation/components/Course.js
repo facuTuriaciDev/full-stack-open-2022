@@ -31,4 +31,12 @@ const Course = ({ course }) => {
   )
 }
 
+/*
+2.5: separate module
+Declare the Course component as a separate module, which is imported by the App component. 
+You can include all subcomponents of the course into the same module.
+
+I have included all subcomponents likle Header, Content, Total and Part into the same module Course.js a couple exercises ago.
+*/
+
 export default Course
