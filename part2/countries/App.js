@@ -19,7 +19,6 @@ const App = () => {
 
   
   const handleFindCountry = (event) => {
-    console.log(event.target.value)
     setFindCountry(event.target.value)
   }
 
