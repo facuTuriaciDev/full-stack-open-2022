@@ -19,6 +19,7 @@ const App = () => {
 
   
   const handleFindCountry = (event) => {
+    console.log(event.target.value)
     setFindCountry(event.target.value)
   }
 
@@ -32,7 +33,7 @@ const App = () => {
         ? <p>Enter a country name</p>
         : findCountry.length > 10 
         ? <p>Enter a country name</p>
-        : <Countries filterArray={filterArray} />
+        : <Countries filterArray={filterArray} setFindCountry={setFindCountry} />
       }
       
     </div>
