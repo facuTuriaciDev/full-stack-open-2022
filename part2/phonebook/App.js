@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter.js'
 import PersonForm from './components/PersonForm.js'
 import Persons from './components/Persons.js'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,13 +12,14 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons').then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }, [])
 
+    personsService
+      .getAll()
+      .then(initialNotes => {
+        setPersons(initialNotes)
+      })
+    }, [])
+  
   const filterArray = findPerson.length === 0 ? persons 
   : persons.filter(e=>e.name.includes(findPerson))
 
@@ -37,9 +38,14 @@ const App = () => {
       number: newNumber
     }
 
-    setPersons(persons.concat(nameObject));
-    setNewName('');
-    setNewNumber('');
+    personsService
+    .create(nameObject)
+    .then(response => {      
+      setPersons(persons.concat(response));
+      setNewName('');
+      setNewNumber('');
+    })
+
   }
 
   const handleNameChange = (event) => {
