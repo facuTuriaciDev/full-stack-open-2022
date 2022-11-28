@@ -11,7 +11,6 @@ const App = () => {
   const [findPerson, setFindPerson] = useState('')
 
   useEffect(() => {
-    console.log('effect')
 
     personsService
       .getAll()
@@ -23,18 +22,24 @@ const App = () => {
   const filterArray = findPerson.length === 0 ? persons 
   : persons.filter(e=>e.name.includes(findPerson))
 
+
   const addNewName = (event) => {
     event.preventDefault();
 
-
     if(persons.map(person=>person.name).includes(newName)){
-      alert(`${newName} is already added to phonebook`)
-      return
+      updatePerson()
+    } else {
+      createPerson()
     }
+
+  }
+
+  const createPerson = () => {
+    let maxId = Math.max(...persons.map(e => e.id))
 
     const nameObject = {
       name: newName,
-      id: persons.length + 1,
+      id: maxId + 1,
       number: newNumber
     }
 
@@ -45,7 +50,29 @@ const App = () => {
       setNewName('');
       setNewNumber('');
     })
+  }
 
+  const updatePerson = () => {
+    if(window.confirm(`${newName} is already added to phonebook, 
+    replace the older number with a new one?`)){
+        
+      let personToUpdate = persons.find(e => e.name === newName)
+
+      const nameObject = {
+        name: personToUpdate.name,
+        id: personToUpdate.id,
+        number: newNumber
+      }
+
+      personsService
+      .update(personToUpdate.id, nameObject)
+      .then(response => {      
+        setPersons(persons.map(e => e.id !== nameObject.id ? e : response));
+        setNewName('');
+        setNewNumber('');
+      })
+
+    }
   }
 
   const deletePerson = (id) => {
@@ -69,7 +96,6 @@ const App = () => {
   }
 
   const handleFindPerson = (event) => {
-    console.log(event.target.value);
     setFindPerson(event.target.value)
   }
 
