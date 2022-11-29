@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter.js'
 import PersonForm from './components/PersonForm.js'
 import Persons from './components/Persons.js'
+import Notification from './components/Notification.js'
 import personsService from './services/persons'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [findPerson, setFindPerson] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
 
@@ -46,10 +48,20 @@ const App = () => {
     personsService
     .create(nameObject)
     .then(response => {      
-      setPersons(persons.concat(response));
-      setNewName('');
-      setNewNumber('');
+      setPersons(persons.concat(response))
+      manageMessage(`Added ${newName}`)
+      setNewName('')
+      setNewNumber('')
     })
+
+  }
+
+  const manageMessage = (message) => {
+    setMessage(message);
+    setTimeout(() => {
+      setMessage(null)
+    }
+    , 5000)
   }
 
   const updatePerson = () => {
@@ -67,9 +79,10 @@ const App = () => {
       personsService
       .update(personToUpdate.id, nameObject)
       .then(response => {      
-        setPersons(persons.map(e => e.id !== nameObject.id ? e : response));
-        setNewName('');
-        setNewNumber('');
+        setPersons(persons.map(e => e.id !== nameObject.id ? e : response))
+        manageMessage(`Updated ${newName}`)
+        setNewName('')
+        setNewNumber('')
       })
 
     }
@@ -103,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter findPerson={findPerson} handleFindPerson={handleFindPerson}/>
       <h2>add a new</h2>
       <PersonForm newNumber={newNumber} newName={newName}
