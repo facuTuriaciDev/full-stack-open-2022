@@ -13,13 +13,12 @@ const App = () => {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-
     personsService
       .getAll()
       .then(initialNotes => {
         setPersons(initialNotes)
       })
-    }, [])
+    }, [message])
   
   const filterArray = findPerson.length === 0 ? persons 
   : persons.filter(e=>e.name.includes(findPerson))
@@ -53,7 +52,9 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     })
-
+    .catch(error => {
+      manageMessage(`|ERROR| ${newName} has already been added to the server`)
+    })
   }
 
   const manageMessage = (message) => {
@@ -84,6 +85,9 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        manageMessage(`|ERROR| Information of ${newName} has already been removed from server`)
+      })
 
     }
   }
@@ -95,6 +99,9 @@ const App = () => {
         .deleteUser(id)
         .then(response => {
           setPersons(persons.filter(e=>e.id !== id))
+        })
+        .catch(error => {
+          manageMessage(`|ERROR| Information of ${person.name} has already been removed from server`)
         })
       }
   }
